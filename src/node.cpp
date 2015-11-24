@@ -15,6 +15,11 @@ TextNode::TextNode(std::string value) {
 	this->value = value;
 };
 
+std::string ElementNode::unique[] = {
+		"area", "base", "col", "command", "embed", "hr", "img", "input",
+		"keygen", "link", "meta", "param", "source", "track", "wbr"
+};
+
 ElementNode::ElementNode(std::string nodeName) {
 	this->nodeName = nodeName;
 };
@@ -29,25 +34,29 @@ void ElementNode::createTextNode(std::string value) {
 	appendChild(*textNode);
 };
 
+bool ElementNode::isUnique() {
+	for (std::string name: ElementNode::unique) {
+		if (name == nodeName)
+			return true;
+	}
+	return false;
+};
+
 std::string ElementNode::outerHTML() {
 	std::string ret = "<" + nodeName;
-
 	for (unsigned i = 0; i < attributes.size(); ++i) {
 		ret += " " + attributes[i]->name + "=\""+ attributes[i]->value  + "\"";
 	}
-
 	ret += ">";
-
-	ret += innerHTML();
-
-	ret += "</" + nodeName + ">";
-
+	if (!isUnique()) {
+		ret += innerHTML();
+		ret += "</" + nodeName + ">";
+	}
 	return ret;
 };
 
 std::string ElementNode::innerHTML() {
 	std::string ret = "";
-
 	for (unsigned i = 0; i < childNodes.size(); ++i) {
 		ElementNode* node = dynamic_cast<ElementNode*>(childNodes[i]);
 		if (node != nullptr) {
@@ -57,7 +66,6 @@ std::string ElementNode::innerHTML() {
 			ret += childNodes[i]->value;
 		}
 	}
-
 	return ret;
 };
 

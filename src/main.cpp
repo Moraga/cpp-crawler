@@ -11,6 +11,14 @@ int main() {
 
 	body.createTextNode("text text");
 
+	ElementNode input("input");
+	input.setAttribute("type", "text");
+	body.appendChild(input);
+
+	ElementNode p("p");
+	p.createTextNode("paragraph");
+	body.appendChild(p);
+
 
 	std::cout << html.outerHTML() << std::endl;
 }

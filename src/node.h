@@ -19,11 +19,13 @@ struct Attribute {
 };
 
 struct ElementNode: public Node {
+	static std::string unique[];
 	std::vector<Attribute*> attributes;
 	ElementNode(std::string);
 	~ElementNode();
 	void setAttribute(std::string, std::string);
 	void createTextNode(std::string);
+	bool isUnique();
 	std::string outerHTML();
 	std::string innerHTML();
 };
