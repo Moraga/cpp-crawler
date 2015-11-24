@@ -9,5 +9,8 @@ int main() {
 	html.setAttribute("lang", "pt");
 	html.appendChild(body);
 
+	body.createTextNode("text text");
+
+
 	std::cout << html.outerHTML() << std::endl;
 }

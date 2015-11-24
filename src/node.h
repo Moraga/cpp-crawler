@@ -5,6 +5,7 @@
 struct Node {
 	std::string nodeName;
 	std::string nodeType;
+	std::string value;
 	Node* parentNode;
 	std::vector<Node*> childNodes;
 	virtual ~Node();
@@ -22,6 +23,11 @@ struct ElementNode: public Node {
 	ElementNode(std::string);
 	~ElementNode();
 	void setAttribute(std::string, std::string);
+	void createTextNode(std::string);
 	std::string outerHTML();
 	std::string innerHTML();
+};
+
+struct TextNode: public Node {
+	TextNode(std::string);
 };

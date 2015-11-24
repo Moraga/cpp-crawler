@@ -11,6 +11,10 @@ Attribute::Attribute(std::string name, std::string value) {
 	this->value = value;
 };
 
+TextNode::TextNode(std::string value) {
+	this->value = value;
+};
+
 ElementNode::ElementNode(std::string nodeName) {
 	this->nodeName = nodeName;
 };
@@ -18,6 +22,11 @@ ElementNode::ElementNode(std::string nodeName) {
 void ElementNode::setAttribute(std::string name, std::string value) {
 	Attribute* attribute = new Attribute(name, value);
 	attributes.push_back(attribute);
+};
+
+void ElementNode::createTextNode(std::string value) {
+	TextNode* textNode = new TextNode(value);
+	appendChild(*textNode);
 };
 
 std::string ElementNode::outerHTML() {
@@ -43,6 +52,9 @@ std::string ElementNode::innerHTML() {
 		ElementNode* node = dynamic_cast<ElementNode*>(childNodes[i]);
 		if (node != nullptr) {
 			ret += node->outerHTML();
+		}
+		else {
+			ret += childNodes[i]->value;
 		}
 	}
 
