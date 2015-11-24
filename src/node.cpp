@@ -31,6 +31,7 @@ void ElementNode::setAttribute(std::string name, std::string value) {
 
 void ElementNode::createTextNode(std::string value) {
 	TextNode* textNode = new TextNode(value);
+	textNodes.push_back(textNode);
 	appendChild(*textNode);
 };
 
@@ -72,5 +73,8 @@ std::string ElementNode::innerHTML() {
 ElementNode::~ElementNode() {
 	for (unsigned i = attributes.size(); i--;) {
 		delete attributes[i];
+	}
+	for (unsigned i = textNodes.size(); i--;) {
+		delete textNodes[i];
 	}
 };
