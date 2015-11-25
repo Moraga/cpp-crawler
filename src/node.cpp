@@ -40,11 +40,12 @@ ElementNode* ElementNode::createNode(std::string nodeName) {
 	return node;
 };
 
-void ElementNode::createTextNode(std::string value) {
+TextNode* ElementNode::createTextNode(std::string value) {
 	TextNode* textNode = new TextNode(value);
 	textNodes.push_back(textNode);
 	trash.push_back(textNode);
 	appendChild(*textNode);
+	return textNode;
 };
 
 bool ElementNode::isUnique() {

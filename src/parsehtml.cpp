@@ -3,6 +3,10 @@
 #include <string>
 #include "tools.h"
 
+void parse_text(TextNode* textNode) {
+	std::cout << "apply filter/match" << textNode->value << std::endl;
+};
+
 ElementNode* parsehtml(std::string str) {
 	ElementNode* elem = new ElementNode("document");
 
@@ -185,7 +189,7 @@ ElementNode* parsehtml(std::string str) {
 			// closing tag
 			else if (nxt == '/' && alpha.find(str[i + 2]) != std::string::npos) {
 				if (!text.empty()) {
-					elem->createTextNode(text);
+					parse_text(elem->createTextNode(text));
 					text = "";
 				}
 				onelem = true;
@@ -197,7 +201,7 @@ ElementNode* parsehtml(std::string str) {
 			// opening tag
 			else if (alpha.find(nxt) != std::string::npos) {
 				if (!text.empty()) {
-					elem->createTextNode(text);
+					parse_text(elem->createTextNode(text));
 					text = "";
 				}
 				onelem = true;
@@ -221,4 +225,4 @@ ElementNode* parsehtml(std::string str) {
 	}
 
 	return stack[0];
-}
+};

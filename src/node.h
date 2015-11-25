@@ -34,7 +34,7 @@ struct ElementNode: public Node {
 	~ElementNode();
 	void setAttribute(std::string, std::string);
 	ElementNode* createNode(std::string);
-	void createTextNode(std::string);
+	TextNode* createTextNode(std::string);
 	bool isUnique();
 	bool parsable();
 	std::string outerHTML();
