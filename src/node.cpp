@@ -21,6 +21,8 @@ std::string ElementNode::unique[] = {
 		"keygen", "link", "meta", "param", "source", "track", "wbr"
 };
 
+std::string ElementNode::ignore[] = {"script", "style"};
+
 ElementNode::ElementNode(std::string nodeName) {
 	this->nodeName = nodeName;
 };
@@ -51,6 +53,14 @@ bool ElementNode::isUnique() {
 			return true;
 	}
 	return false;
+};
+
+bool ElementNode::parsable() {
+	for (std::string name: ElementNode::ignore) {
+		if (name == nodeName)
+			return false;
+	}
+	return true;
 };
 
 std::string ElementNode::outerHTML() {

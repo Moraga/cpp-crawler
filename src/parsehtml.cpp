@@ -9,7 +9,7 @@ ElementNode* parsehtml(std::string str) {
 	std::string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	std::string alnum = alpha + "0123456789";
 	std::string aldot = alnum + "-:";
-	std::string space = "\r\n\t";
+	std::string space = " \r\n\t";
 	std::string specs = space + ">";
 
 	std::string dont = "";
@@ -135,7 +135,13 @@ ElementNode* parsehtml(std::string str) {
 					for (unsigned i = 0; i < atts.size(); ++i) {
 						node->setAttribute(atts[i].name, atts[i].value);
 					}
-					if (node->isUnique()) {
+					// ignore content of script and style tags
+					if (!node->parsable()) {
+						elem = node;
+						dont = "</" + elem->nodeName;
+					}
+					// doesnt have close instruction
+					else if (node->isUnique()) {
 
 					}
 					else {
@@ -152,14 +158,22 @@ ElementNode* parsehtml(std::string str) {
 		}
 		// comment block
 		else if (oncomm) {
-			if (chr == '>') {
+			if (chr == '>' && text.substr(text.size() - 2) == "--") {
 				oncomm = false;
 			}
 			text += chr;
 		}
+		// in script or style tag
 		else if (!dont.empty()) {
-
-
+			if (chr == '>') {
+				if ("script" == elem->nodeName) {
+					// parse script content
+				}
+				dont = "";
+				text = "";
+				continue;
+			}
+			text += chr;
 		}
 		// open tag
 		else if (chr == '<') {
@@ -199,6 +213,11 @@ ElementNode* parsehtml(std::string str) {
 		else {
 			text += chr;
 		}
+	}
+
+	// missing close tag
+	if (!text.empty()) {
+		elem->createTextNode(text);
 	}
 
 	return stack[0];

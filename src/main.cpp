@@ -4,16 +4,14 @@
 #include "tools.h"
 
 int main() {
-	//parsehtml();
+	std::string content =
+			"<html lang = pt>"
+			"<body>"
+			"<p class='paragraph'>p content</p>"
+			"</body>";
 
-	//std::cout << document.nodeName << std::endl;
-
-	ElementNode* node = parsehtml("<html lang=pt><body>test</body></html>");
+	ElementNode* node = parsehtml(content);
 
 	std::cout << node->outerHTML() << "\n";
-
-	std::cout << node->childNodes[0]->childNodes[0]->nodeName << "\n";
-
-	//std::cout << "Ok!\n" << ;
 
 }

@@ -27,6 +27,7 @@ struct TextNode: public Node {
 
 struct ElementNode: public Node {
 	static std::string unique[];
+	static std::string ignore[];
 	std::vector<Attribute*> attributes;
 	std::vector<TextNode*> textNodes;
 	ElementNode(std::string);
@@ -35,6 +36,7 @@ struct ElementNode: public Node {
 	ElementNode* createNode(std::string);
 	void createTextNode(std::string);
 	bool isUnique();
+	bool parsable();
 	std::string outerHTML();
 	std::string innerHTML();
 };
