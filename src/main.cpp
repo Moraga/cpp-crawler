@@ -1,24 +1,19 @@
 #include <iostream>
+#include <vector>
 #include "node.h"
-
+#include "tools.h"
 
 int main() {
-	ElementNode html("html"),
-			body("body");
+	//parsehtml();
 
-	html.setAttribute("lang", "pt");
-	html.appendChild(body);
+	//std::cout << document.nodeName << std::endl;
 
-	body.createTextNode("text text");
+	ElementNode* node = parsehtml("<html lang=pt><body>test</body></html>");
 
-	ElementNode input("input");
-	input.setAttribute("type", "text");
-	body.appendChild(input);
+	std::cout << node->outerHTML() << "\n";
 
-	ElementNode p("p");
-	p.createTextNode("paragraph");
-	body.appendChild(p);
+	std::cout << node->childNodes[0]->childNodes[0]->nodeName << "\n";
 
+	//std::cout << "Ok!\n" << ;
 
-	std::cout << html.outerHTML() << std::endl;
 }

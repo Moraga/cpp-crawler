@@ -3,6 +3,7 @@
 Node::~Node() {};
 
 void Node::appendChild(Node& node) {
+	node.parentNode = this;
 	childNodes.push_back(&node);
 };
 
@@ -27,11 +28,20 @@ ElementNode::ElementNode(std::string nodeName) {
 void ElementNode::setAttribute(std::string name, std::string value) {
 	Attribute* attribute = new Attribute(name, value);
 	attributes.push_back(attribute);
+	trash.push_back(attribute);
+};
+
+ElementNode* ElementNode::createNode(std::string nodeName) {
+	ElementNode* node = new ElementNode(nodeName);
+	trash.push_back(node);
+	appendChild(*node);
+	return node;
 };
 
 void ElementNode::createTextNode(std::string value) {
 	TextNode* textNode = new TextNode(value);
 	textNodes.push_back(textNode);
+	trash.push_back(textNode);
 	appendChild(*textNode);
 };
 
@@ -71,10 +81,7 @@ std::string ElementNode::innerHTML() {
 };
 
 ElementNode::~ElementNode() {
-	for (unsigned i = attributes.size(); i--;) {
-		delete attributes[i];
-	}
-	for (unsigned i = textNodes.size(); i--;) {
-		delete textNodes[i];
+	for (unsigned i = trash.size(); i--;) {
+		delete trash[i];
 	}
 };
