@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 struct Url {
@@ -7,4 +8,5 @@ struct Url {
 	std::string path;
 	Url();
 	static Url parse(std::string);
+	void print();
 };

@@ -14,12 +14,13 @@ int main() {
 	//ElementNode* node = parsehtml(content);
 	//std::cout << node->outerHTML() << "\n";
 
-	Url url = Url::parse("http://www.example.com");
+	Url::parse("www.one.com").print();
+	Url::parse("//www.two.com").print();
+	Url::parse("http://www.three.com").print();
+	Url::parse("http:www.four.com").print();
+	Url::parse("www.five.com:80").print();
+	Url::parse("www.six.com/path").print();
+	Url::parse("http://www.seven.com/path").print();
+	Url::parse("http://www.eight.com:80/path").print();
 
-	std::cout <<
-				"\nprotocol: " << url.protocol <<
-				"\ndomain: " << url.domain <<
-				"\nport: " << url.port <<
-				"\npath: " << url.path <<
-				std::endl;
 }

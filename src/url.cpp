@@ -1,42 +1,54 @@
 #include "url.h"
 
 Url::Url() {
-	port = "80";
 	path = "/";
 }
 
+// http:uol.com.br
+// http:uol.com.br:80/
+// http://uol.com.br
+// http://uol.com.br:80
+// http://uol.com.br/path
+
 Url Url::parse(std::string str) {
 	Url url;
-	int dot, pth;
+	int sep, bar;
 
-	dot = str.find(':');
+	sep = str.find(':');
+	bar = str.find('/');
 
-	if (dot != std::string::npos) {
-		url.protocol = str.substr(0, dot);
-		while (str[dot + 1] == '/') {
-			++dot;
-		}
-		str = str.substr(dot + 1);
+	// protocol
+	if (sep != std::string::npos && (bar == std::string::npos || sep < bar)) {
+		url.protocol = str.substr(0, sep);
+	}
+	else {
+		sep = -1;
 	}
 
-	dot = str.find(':');
-	pth = str.find('/');
+	// remove initial bars
+	while (str[sep + 1] == '/') {
+		++sep;
+	}
+	str = str.substr(sep + 1);
+
+	sep = str.find(':');
+	bar = str.find('/');
 
 	// port, path and domain
-	if (dot != std::string::npos && pth != std::string::npos && dot < pth) {
-		url.domain = str.substr(0, dot);
-		url.port = str.substr(dot + 1, pth - dot - 1);
-		url.path = str.substr(pth);
+	if (sep != std::string::npos && bar != std::string::npos && sep < bar) {
+		url.domain = str.substr(0, sep);
+		url.port = str.substr(sep + 1, bar - sep - 1);
+		url.path = str.substr(bar);
 	}
 	// only port
-	else if (dot != std::string::npos && pth == std::string::npos) {
-		url.domain = str.substr(0, dot);
-		url.port = str.substr(dot + 1);
+	else if (sep != std::string::npos && bar == std::string::npos) {
+		url.domain = str.substr(0, sep);
+		url.port = str.substr(bar + 1);
 	}
 	// only path
-	else if (pth != std::string::npos) {
-		url.domain = str.substr(0, pth);
-		url.path = str.substr(pth);
+	else if (bar != std::string::npos) {
+		url.domain = str.substr(0, bar);
+		url.path = str.substr(bar);
 	}
 	// only domain
 	else {
@@ -44,4 +56,13 @@ Url Url::parse(std::string str) {
 	}
 
 	return url;
+}
+
+void Url::print() {
+	std::cout <<
+			"\nprotocol: " << protocol <<
+			"\ndomain: " << domain <<
+			"\nport: " << port <<
+			"\npath: " << path <<
+			std::endl;
 }
