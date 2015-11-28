@@ -4,12 +4,6 @@ Url::Url() {
 	path = "/";
 }
 
-// http:uol.com.br
-// http:uol.com.br:80/
-// http://uol.com.br
-// http://uol.com.br:80
-// http://uol.com.br/path
-
 Url Url::parse(std::string str) {
 	Url url;
 	int sep, bar;
@@ -31,6 +25,7 @@ Url Url::parse(std::string str) {
 	}
 	str = str.substr(sep + 1);
 
+	// search again
 	sep = str.find(':');
 	bar = str.find('/');
 
