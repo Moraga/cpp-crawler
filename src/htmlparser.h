@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -7,6 +9,6 @@ struct HTMLParser {
 	ElementNode* document;
 	void parse(const std::string);
 	virtual void parse_element(ElementNode*);
-	virtual void parse_text(TextNode* textNode);
+	virtual void parse_text(TextNode*);
 	virtual ~HTMLParser() {}
 };

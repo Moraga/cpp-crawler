@@ -1,11 +1,16 @@
 #include "htmlparser.h"
 
 void HTMLParser::parse_text(TextNode* textNode) {
-	std::cout << "parsing text" << textNode->value << std::endl;
+	//std::cout << "parsing text" << textNode->value << std::endl;
 };
 
 void HTMLParser::parse_element(ElementNode* node) {
-
+	if ("title" == node->nodeName) {
+		std::cout << "Title: " << node->innerHTML();
+	}
+	else if ("link" == node->nodeName) {
+		//std::cout << "href: " << node->getAttribute("href");
+	}
 };
 
 void HTMLParser::parse(const std::string str) {
@@ -120,6 +125,7 @@ void HTMLParser::parse(const std::string str) {
 				if (isclos) {
 					for (unsigned j = stack.size(); j--;) {
 						if (stack[j]->nodeName == name) {
+							parse_element(stack[j]);
 							stack.erase(stack.end() - j, stack.end());
 							elem = stack[j - 1];
 							break;
@@ -145,9 +151,9 @@ void HTMLParser::parse(const std::string str) {
 						elem = node;
 						dont = "</" + elem->nodeName;
 					}
-					// doesnt have close instruction
+					// have not close tag
 					else if (node->isUnique()) {
-
+						parse_element(node);
 					}
 					else {
 						elem = nullptr;
