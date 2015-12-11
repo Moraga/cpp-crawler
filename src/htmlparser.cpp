@@ -8,7 +8,7 @@ void HTMLParser::parse_element(ElementNode* node) {
 
 };
 
-void HTMLParser::parse(std::string str) {
+void HTMLParser::parse(const std::string str) {
 	ElementNode* elem = new ElementNode("document");
 
 	std::string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
