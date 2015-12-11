@@ -27,6 +27,13 @@ ElementNode::ElementNode(std::string nodeName) {
 	this->nodeName = nodeName;
 };
 
+std::string ElementNode::getAttribute(std::string name) {
+	for (unsigned i = 0; i < attributes.size(); ++i)
+		if (name == attributes[i]->name)
+			return attributes[i]->value;
+	return "";
+};
+
 void ElementNode::setAttribute(std::string name, std::string value) {
 	Attribute* attribute = new Attribute(name, value);
 	attributes.push_back(attribute);

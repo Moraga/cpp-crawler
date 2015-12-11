@@ -32,6 +32,7 @@ struct ElementNode: public Node {
 	std::vector<TextNode*> textNodes;
 	ElementNode(std::string);
 	~ElementNode();
+	std::string getAttribute(std::string);
 	void setAttribute(std::string, std::string);
 	ElementNode* createNode(std::string);
 	TextNode* createTextNode(std::string);
