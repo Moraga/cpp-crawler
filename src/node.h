@@ -13,6 +13,8 @@ struct Node {
 	std::vector<Node*> childNodes;
 	virtual ~Node();
 	void appendChild(Node&);
+	std::vector<Node*> siblings();
+	Node* prev();
 protected:
 	std::vector<Node*> trash;
 };

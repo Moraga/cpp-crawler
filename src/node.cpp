@@ -7,6 +7,29 @@ void Node::appendChild(Node& node) {
 	childNodes.push_back(&node);
 };
 
+std::vector<Node*> Node::siblings() {
+	std::vector<Node*> siblings;
+	for (Node* item: parentNode->childNodes) {
+		if (item != this) {
+			siblings.push_back(item);
+		}
+	}
+	return siblings;
+};
+
+Node* Node::prev() {
+	Node* prev = nullptr;
+	for (Node* item: parentNode->childNodes) {
+		if (item == this) {
+			break;
+		}
+		else {
+			prev = item;
+		}
+	}
+	return prev;
+};
+
 Attribute::Attribute(std::string name, std::string value) {
 	this->name = name;
 	this->value = value;
