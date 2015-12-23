@@ -2,4 +2,4 @@
 
 #include <string>
 
-std::string replace(const std::string&, const std::string&, const std::string&);
+void replace(std::string&, const std::string&, const std::string&);
