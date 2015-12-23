@@ -16,8 +16,11 @@ struct Node {
 	std::vector<Node*> siblings();
 	Node* prev();
 	int proximity(Node*);
-	int searchInside(Node*, int);
-	int searchOutside(Node*, int);
+	int searchInside(Node*, int=0);
+	int searchOutside(Node*, int=0);
+	std::vector<Node*> closest(const std::string&, int=1);
+	std::vector<Node*> closestInside(const std::string&, int=1);
+	std::vector<Node*> closestOutside(const std::string&, int=1);
 protected:
 	std::vector<Node*> trash;
 };
