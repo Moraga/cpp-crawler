@@ -30,6 +30,55 @@ Node* Node::prev() {
 	return prev;
 };
 
+int Node::proximity(Node* node) {
+	return 0;
+};
+
+int Node::searchInside(Node* node, int depth=0) {
+	int size = childNodes.size();
+	// is sibling
+	for (unsigned i = size; --i; )
+		if (childNodes[i] == node)
+			return i + depth;
+	// depth search
+	for (unsigned i = 0; i < size; i++) {
+		int distance = childNodes[i]->searchInside(node, i + 1 + depth);
+		if (distance > 0)
+			return distance;
+	}
+	return 0;
+};
+
+int Node::searchOutside(Node* node, int depth=0) {
+	if (parentNode) {
+		std::vector<Node*> childNodes = parentNode->childNodes;
+		int size = childNodes.size();
+		int position = size;
+		// find this position on parent node
+		for (; --position; )
+			if (childNodes[position] == this)
+				break;
+		// navigate through the siblings
+		for (int j = 0, k = position * -1; j < size; ++j, ++k) {
+			// prevent repeat this node
+			if (k != 0) {
+				if (childNodes[j] == node) {
+					return std::abs(k) + depth;
+				}
+				else {
+					int distance = childNodes[j]->searchInside(node, std::abs(k) + 1 + depth);
+					if (distance > 0)
+						return distance;
+				}
+			}
+		}
+		// up the tree
+		return parentNode->searchOutside(node, position + 1 + depth);
+	}
+
+	return 0;
+};
+
 Attribute::Attribute(std::string name, std::string value) {
 	this->name = name;
 	this->value = value;
