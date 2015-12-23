@@ -1,4 +1,4 @@
-#include "tools.h"
+#include "mapstring.h"
 
 void mapstring(std::string str) {
 	std::string all =

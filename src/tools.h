@@ -1,8 +1,5 @@
 #pragma once
 
 #include <string>
-#include "node.h"
 
-void mapstring(std::string);
-
-ElementNode* parsehtml(std::string);
+std::string replace(const std::string&, const std::string&, const std::string&);
