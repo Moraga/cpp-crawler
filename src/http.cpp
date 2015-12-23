@@ -1,6 +1,5 @@
 #include "http.h"
 
-
 bool http::conn(std::string host, int port) {
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == -1)
@@ -47,6 +46,6 @@ std::string http::read() {
 std::string http::fetch(std::string url) {
 	Url u = Url::parse(url);
 	conn(u.domain, 80);
-	write("GET "+ u.path +" HTTP/1.1\r\nHost: "+ u.domain +"\r\n\r\n");
+	write("GET "+ u.path +" HTTP/1.0\r\nHost: "+ u.domain +"\r\n\r\n");
 	return read();
 };
