@@ -16,7 +16,7 @@ struct Node {
 	void appendChild(Node&);
 	std::vector<Node*> siblings();
 	Node* prev();
-	std::string content(int=0);
+	std::string content(float=0);
 	std::string text();
 	int proximity(Node*);
 	int searchInside(Node*, int=0);

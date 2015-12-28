@@ -30,7 +30,7 @@ Node* Node::prev() {
 	return prev;
 };
 
-std::string Node::content(int max_length) {
+std::string Node::content(float max_length) {
 	Node* node = this;
 	bool found = false;
 
