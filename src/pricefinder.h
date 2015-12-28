@@ -5,6 +5,7 @@
 
 struct PriceFinder: public HTMLParser {
 	std::vector<Price*> options;
-	static std::regex regex;
+	std::vector<Price*> installments;
 	void parse_text(TextNode*);
+	void analyze();
 };
