@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "tools.h"
 
 struct Node {
 	std::string nodeName;
@@ -15,6 +16,8 @@ struct Node {
 	void appendChild(Node&);
 	std::vector<Node*> siblings();
 	Node* prev();
+	std::string content(int=0);
+	std::string text();
 	int proximity(Node*);
 	int searchInside(Node*, int=0);
 	int searchOutside(Node*, int=0);

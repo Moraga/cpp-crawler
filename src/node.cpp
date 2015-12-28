@@ -30,6 +30,53 @@ Node* Node::prev() {
 	return prev;
 };
 
+std::string Node::content(int max_length) {
+	Node* node = this;
+	bool found = false;
+
+	// checks whether a column
+	for (unsigned tries = 4; node && tries-- > 0; node = node->parentNode) {
+		if (node->nodeName == "td") {
+			found = true;
+			break;
+		}
+	}
+
+	// return table row for columns
+	if (found) {
+		for (unsigned tries = 4; node && tries-- > 0; node = node->parentNode) {
+			if (node->nodeName == "tr")
+				return node->text();
+		}
+	}
+	else if (max_length > 0) {
+		node = this;
+		for (unsigned tries = 4; node && tries-- > 0; node = node->parentNode) {
+			std::string text = trim(node->text());
+			if (text.length() > max_length) {
+				if (text.length() > max_length * 5)
+					break;
+				return text;
+			}
+		}
+	}
+
+	return text();
+};
+
+std::string Node::text() {
+	std::string text = "";
+	for (Node* childNode: childNodes) {
+		if (TextNode* textNode = dynamic_cast<TextNode*>(childNode)) {
+			text += " " + textNode->value;
+		}
+		else {
+			text += " " + childNode->text();
+		}
+	}
+	return text.substr(1);
+};
+
 int Node::proximity(Node* node) {
 	return 0;
 };
