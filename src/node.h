@@ -29,11 +29,11 @@ protected:
 };
 
 struct Attribute: public Node {
-	Attribute(std::string, std::string);
+	Attribute(const std::string, const std::string);
 };
 
 struct TextNode: public Node {
-	TextNode(std::string);
+	TextNode(const std::string);
 	std::string text();
 };
 
@@ -42,12 +42,12 @@ struct ElementNode: public Node {
 	static std::string ignore[];
 	std::vector<Attribute*> attributes;
 	std::vector<TextNode*> textNodes;
-	ElementNode(std::string);
+	ElementNode(const std::string);
 	~ElementNode();
-	std::string getAttribute(std::string);
-	void setAttribute(std::string, std::string);
-	ElementNode* createElementNode(std::string);
-	TextNode* createTextNode(std::string);
+	std::string getAttribute(const std::string);
+	void setAttribute(const std::string, const std::string);
+	ElementNode* createElementNode(const std::string);
+	TextNode* createTextNode(const std::string);
 	bool isUnique();
 	bool parsable();
 	std::string outerHTML();

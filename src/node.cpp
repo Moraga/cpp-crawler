@@ -29,9 +29,9 @@ std::string Node::content(float maxLength) {
 	Node* node = this;
 
 	// short and closured tags
-	for (unsigned i = 4; node && i-- > 0; node = node->parentNode) {
+	for (unsigned i = 4; node && i--; node = node->parentNode) {
 		if ("td" == node->nodeName) {
-			for (unsigned j = 4; node && j-- > 0; node = node->parentNode) {
+			for (unsigned j = 4; node && j--; node = node->parentNode) {
 				if ("tr" == node->nodeName) {
 					return node->text();
 				}
@@ -42,7 +42,7 @@ std::string Node::content(float maxLength) {
 	// max length and up the tree
 	if (maxLength > 0) {
 		node = this;
-		for (unsigned tries = 4; node && tries-- > 0; node = node->parentNode) {
+		for (unsigned tries = 4; node && tries--; node = node->parentNode) {
 			std::string text = trim(node->text());
 			if (text.length() > maxLength) {
 				if (text.length() > maxLength * 5)
@@ -69,16 +69,19 @@ int Node::proximity(Node* node) {
 
 int Node::searchInside(Node* node, int depth) {
 	int size = childNodes.size();
+
 	// siblings
 	for (unsigned i = size; --i; )
 		if (childNodes[i] == node)
 			return i + depth;
+
 	// depth search
 	for (unsigned i = 0; i < size; i++) {
 		int distance = childNodes[i]->searchInside(node, i + 1 + depth);
 		if (distance > 0)
 			return distance;
 	}
+
 	return 0;
 };
 
@@ -194,12 +197,12 @@ std::vector<Node*> Node::closestOutside(const std::string& nodeName, int size) {
 	return nodes;
 };
 
-Attribute::Attribute(std::string name, std::string value) {
+Attribute::Attribute(const std::string name, const std::string value) {
 	this->name = name;
 	this->value = value;
 };
 
-TextNode::TextNode(std::string value) {
+TextNode::TextNode(const std::string value) {
 	this->value = value;
 };
 
@@ -214,31 +217,31 @@ std::string ElementNode::unique[] = {
 
 std::string ElementNode::ignore[] = {"script", "style"};
 
-ElementNode::ElementNode(std::string nodeName) {
+ElementNode::ElementNode(const std::string nodeName) {
 	this->nodeName = nodeName;
 };
 
-std::string ElementNode::getAttribute(std::string name) {
+std::string ElementNode::getAttribute(const std::string name) {
 	for (unsigned i = 0; i < attributes.size(); ++i)
 		if (name == attributes[i]->name)
 			return attributes[i]->value;
 	return "";
 };
 
-void ElementNode::setAttribute(std::string name, std::string value) {
+void ElementNode::setAttribute(const std::string name, const std::string value) {
 	Attribute* attribute = new Attribute(name, value);
 	attributes.push_back(attribute);
 	trash.push_back(attribute);
 };
 
-ElementNode* ElementNode::createElementNode(std::string nodeName) {
+ElementNode* ElementNode::createElementNode(const std::string nodeName) {
 	ElementNode* node = new ElementNode(nodeName);
 	trash.push_back(node);
 	appendChild(*node);
 	return node;
 };
 
-TextNode* ElementNode::createTextNode(std::string value) {
+TextNode* ElementNode::createTextNode(const std::string value) {
 	TextNode* textNode = new TextNode(value);
 	textNodes.push_back(textNode);
 	trash.push_back(textNode);
