@@ -142,7 +142,7 @@ void HTMLParser::parse(const std::string str) {
 					}
 
 					// creates the tag
-					ElementNode* node = elem->createNode(name);
+					ElementNode* node = elem->createElementNode(name);
 					for (unsigned i = 0; i < atts.size(); ++i) {
 						node->setAttribute(atts[i].name, atts[i].value);
 					}
