@@ -247,26 +247,23 @@ TextNode* ElementNode::createTextNode(std::string value) {
 };
 
 bool ElementNode::isUnique() {
-	for (std::string name: ElementNode::unique) {
+	for (std::string name: ElementNode::unique)
 		if (name == nodeName)
 			return true;
-	}
 	return false;
 };
 
 bool ElementNode::parsable() {
-	for (std::string name: ElementNode::ignore) {
+	for (std::string name: ElementNode::ignore)
 		if (name == nodeName)
 			return false;
-	}
 	return true;
 };
 
 std::string ElementNode::outerHTML() {
 	std::string ret = "<" + nodeName;
-	for (unsigned i = 0; i < attributes.size(); ++i) {
-		ret += " " + attributes[i]->name + "=\""+ attributes[i]->value  + "\"";
-	}
+	for (Attribute* attribute: attributes)
+		ret += " " + attribute->name + "=\""+ attribute->value  + "\"";
 	ret += ">";
 	if (!isUnique()) {
 		ret += innerHTML();
@@ -277,20 +274,14 @@ std::string ElementNode::outerHTML() {
 
 std::string ElementNode::innerHTML() {
 	std::string ret = "";
-	for (unsigned i = 0; i < childNodes.size(); ++i) {
-		ElementNode* node = dynamic_cast<ElementNode*>(childNodes[i]);
-		if (node != nullptr) {
-			ret += node->outerHTML();
-		}
-		else {
-			ret += childNodes[i]->value;
-		}
+	for (Node* node: childNodes) {
+		ElementNode* elem = dynamic_cast<ElementNode*>(node);
+		ret += elem ? elem->outerHTML() : node->value;
 	}
 	return ret;
 };
 
 ElementNode::~ElementNode() {
-	for (unsigned i = trash.size(); i--;) {
+	for (unsigned i = trash.size(); i--;)
 		delete trash[i];
-	}
 };
