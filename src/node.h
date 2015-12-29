@@ -46,7 +46,7 @@ struct ElementNode: public Node {
 	~ElementNode();
 	std::string getAttribute(std::string);
 	void setAttribute(std::string, std::string);
-	ElementNode* createNode(std::string);
+	ElementNode* createElementNode(std::string);
 	TextNode* createTextNode(std::string);
 	bool isUnique();
 	bool parsable();

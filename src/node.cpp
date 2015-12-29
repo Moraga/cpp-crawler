@@ -66,9 +66,8 @@ std::string Node::content(float max_length) {
 
 std::string Node::text() {
 	std::string text = "";
-	for (Node* childNode: childNodes) {
+	for (Node* childNode: childNodes)
 		text += " " + childNode->text();
-	}
 	return text.substr(1);
 };
 
@@ -233,7 +232,7 @@ void ElementNode::setAttribute(std::string name, std::string value) {
 	trash.push_back(attribute);
 };
 
-ElementNode* ElementNode::createNode(std::string nodeName) {
+ElementNode* ElementNode::createElementNode(std::string nodeName) {
 	ElementNode* node = new ElementNode(nodeName);
 	trash.push_back(node);
 	appendChild(*node);
