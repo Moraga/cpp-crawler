@@ -67,12 +67,7 @@ std::string Node::content(float max_length) {
 std::string Node::text() {
 	std::string text = "";
 	for (Node* childNode: childNodes) {
-		if (TextNode* textNode = dynamic_cast<TextNode*>(childNode)) {
-			text += " " + textNode->value;
-		}
-		else {
-			text += " " + childNode->text();
-		}
+		text += " " + childNode->text();
 	}
 	return text.substr(1);
 };
@@ -208,6 +203,10 @@ Attribute::Attribute(std::string name, std::string value) {
 
 TextNode::TextNode(std::string value) {
 	this->value = value;
+};
+
+std::string TextNode::text() {
+	return value;
 };
 
 std::string ElementNode::unique[] = {

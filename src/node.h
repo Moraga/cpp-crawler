@@ -17,7 +17,7 @@ struct Node {
 	std::vector<Node*> siblings();
 	Node* prev();
 	std::string content(float=0);
-	std::string text();
+	virtual std::string text();
 	int proximity(Node*);
 	int searchInside(Node*, int=0);
 	int searchOutside(Node*, int=0);
@@ -34,6 +34,7 @@ struct Attribute: public Node {
 
 struct TextNode: public Node {
 	TextNode(std::string);
+	std::string text();
 };
 
 struct ElementNode: public Node {
