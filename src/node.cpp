@@ -9,52 +9,43 @@ void Node::appendChild(Node& node) {
 
 std::vector<Node*> Node::siblings() {
 	std::vector<Node*> siblings;
-	for (Node* item: parentNode->childNodes) {
-		if (item != this) {
-			siblings.push_back(item);
-		}
-	}
+	for (Node* node: parentNode->childNodes)
+		if (node != this)
+			siblings.push_back(node);
 	return siblings;
 };
 
 Node* Node::prev() {
 	Node* prev = nullptr;
-	for (Node* item: parentNode->childNodes) {
-		if (item == this) {
+	for (Node* node: parentNode->childNodes)
+		if (node == this)
 			break;
-		}
-		else {
-			prev = item;
-		}
-	}
+		else
+			prev = node;
 	return prev;
 };
 
-std::string Node::content(float max_length) {
+std::string Node::content(float maxLength) {
 	Node* node = this;
-	bool found = false;
 
-	// checks whether a column
-	for (unsigned tries = 4; node && tries-- > 0; node = node->parentNode) {
-		if (node->nodeName == "td") {
-			found = true;
-			break;
+	// short and closured tags
+	for (unsigned i = 4; node && i-- > 0; node = node->parentNode) {
+		if ("td" == node->nodeName) {
+			for (unsigned j = 4; node && j-- > 0; node = node->parentNode) {
+				if ("tr" == node->nodeName) {
+					return node->text();
+				}
+			}
 		}
 	}
 
-	// return table row for columns
-	if (found) {
-		for (unsigned tries = 4; node && tries-- > 0; node = node->parentNode) {
-			if (node->nodeName == "tr")
-				return node->text();
-		}
-	}
-	else if (max_length > 0) {
+	// max length and up the tree
+	if (maxLength > 0) {
 		node = this;
 		for (unsigned tries = 4; node && tries-- > 0; node = node->parentNode) {
 			std::string text = trim(node->text());
-			if (text.length() > max_length) {
-				if (text.length() > max_length * 5)
+			if (text.length() > maxLength) {
+				if (text.length() > maxLength * 5)
 					break;
 				return text;
 			}
@@ -72,12 +63,13 @@ std::string Node::text() {
 };
 
 int Node::proximity(Node* node) {
-	return 0;
+	int distance = searchInside(node);
+	return distance != 0 ? distance: searchOutside(node);
 };
 
 int Node::searchInside(Node* node, int depth) {
 	int size = childNodes.size();
-	// is sibling
+	// siblings
 	for (unsigned i = size; --i; )
 		if (childNodes[i] == node)
 			return i + depth;
@@ -95,17 +87,18 @@ int Node::searchOutside(Node* node, int depth) {
 		std::vector<Node*> childNodes = parentNode->childNodes;
 		int size = childNodes.size();
 		int position = size;
+
 		// find this position on parent node
 		for (; --position; )
 			if (childNodes[position] == this)
 				break;
+
 		// navigate through the siblings
 		for (int j = 0, k = position * -1; j < size; ++j, ++k) {
 			// prevent repeat this node
 			if (k != 0) {
-				if (childNodes[j] == node) {
+				if (childNodes[j] == node)
 					return std::abs(k) + depth;
-				}
 				else {
 					int distance = childNodes[j]->searchInside(node, std::abs(k) + 1 + depth);
 					if (distance > 0)
@@ -113,6 +106,7 @@ int Node::searchOutside(Node* node, int depth) {
 				}
 			}
 		}
+
 		// up the tree
 		return parentNode->searchOutside(node, position + 1 + depth);
 	}
@@ -121,44 +115,46 @@ int Node::searchOutside(Node* node, int depth) {
 };
 
 std::vector<Node*> Node::closest(const std::string& nodeName, int size) {
-	std::vector<Node*> items = closestInside(nodeName, size);
-	size -= items.size();
+	std::vector<Node*> nodes = closestInside(nodeName, size);
+	size -= nodes.size();
 	if (size > 0) {
 		std::vector<Node*> temp = closestOutside(nodeName, size);
 		if (temp.size() > 0) {
-			items.reserve(items.size() + std::distance(temp.begin(), temp.end()));
-			items.insert(items.end(), temp.begin(), temp.end());
+			nodes.reserve(nodes.size() + std::distance(temp.begin(), temp.end()));
+			nodes.insert(nodes.end(), temp.begin(), temp.end());
 		}
 	}
-	return items;
+	return nodes;
 };
 
 std::vector<Node*> Node::closestInside(const std::string& nodeName, int size) {
-	std::vector<Node*> items;
-	for (Node* item: childNodes) {
+	std::vector<Node*> nodes;
+	for (Node* node: childNodes) {
 		// sibling
-		if (item->nodeName == nodeName) {
-			items.push_back(item);
+		if (node->nodeName == nodeName) {
+			nodes.push_back(node);
 			if (--size == 0)
 				break;
 		}
-		std::vector<Node*> temp = item->closestInside(nodeName, size);
+		std::vector<Node*> temp = node->closestInside(nodeName, size);
 		if (temp.size() > 0) {
-			items.reserve(items.size() + std::distance(temp.begin(), temp.end()));
-			items.insert(items.end(), temp.begin(), temp.end());
+			nodes.reserve(nodes.size() + std::distance(temp.begin(), temp.end()));
+			nodes.insert(nodes.end(), temp.begin(), temp.end());
 			size -= temp.size();
 			if (size < 1)
 				break;
 		}
 	}
-	return items;
+	return nodes;
 };
 
 std::vector<Node*> Node::closestOutside(const std::string& nodeName, int size) {
-	std::vector<Node*> items;
+	std::vector<Node*> nodes;
+
 	if (parentNode) {
 		std::vector<Node*> siblings;
 		int position = 0;
+
 		// get this position and siblings
 		for (unsigned i = 0; i < parentNode->childNodes.size(); ++i) {
 			if (this == parentNode->childNodes[i])
@@ -166,17 +162,18 @@ std::vector<Node*> Node::closestOutside(const std::string& nodeName, int size) {
 			else
 				siblings.push_back(parentNode->childNodes[i]);
 		}
+
 		for (unsigned j = 0, k = ++position * -1; j < position; ++j, ++k) {
 			if (k != 0) {
 				if (parentNode->childNodes[j]->nodeName == nodeName) {
-					items.push_back(parentNode->childNodes[j]);
+					nodes.push_back(parentNode->childNodes[j]);
 					if (--size == 0)
 						break;
 				}
 				std::vector<Node*> temp = parentNode->childNodes[j]->closestInside(nodeName, size);
 				if (temp.size() > 0) {
-					items.reserve(items.size() + std::distance(temp.begin(), temp.end()));
-					items.insert(items.end(), temp.begin(), temp.end());
+					nodes.reserve(nodes.size() + std::distance(temp.begin(), temp.end()));
+					nodes.insert(nodes.end(), temp.begin(), temp.end());
 					size -= temp.size();
 					if (size < 1)
 						break;
@@ -184,15 +181,17 @@ std::vector<Node*> Node::closestOutside(const std::string& nodeName, int size) {
 			}
 		}
 	}
+
 	// up the tree
 	if (size > 0 && parentNode->parentNode) {
 		std::vector<Node*> temp = parentNode->parentNode->closestOutside(nodeName, size);
 		if (temp.size() > 0) {
-			items.reserve(items.size() + std::distance(temp.begin(), temp.end()));
-			items.insert(items.end(), temp.begin(), temp.end());
+			nodes.reserve(nodes.size() + std::distance(temp.begin(), temp.end()));
+			nodes.insert(nodes.end(), temp.begin(), temp.end());
 		}
 	}
-	return items;
+
+	return nodes;
 };
 
 Attribute::Attribute(std::string name, std::string value) {
