@@ -26,20 +26,36 @@ void PriceFinder::parse_text(TextNode* textNode) {
 	}
 };
 
+void PriceFinder::find() {
+	analyze();
+	//check_installments();
+};
+
 void PriceFinder::analyze() {
 	static const std::regex reInstallment("(\\d+)\\s*[Xx]");
 	static const std::regex reSave("([0-9]+[0-9,]*)\\s*%");
 
 	for (Price* price: options) {
-		std::string content = price->content();
 		std::smatch matches;
+		std::string content = price->content();
 		// is an installment
 		if (std::regex_search(content, matches, reInstallment)) {
-
+			Price* installment = new Price(*price);
+			// calculates the total value
+			installment->value *= stoi(matches[1]);
+			// price loses rank
+			price->rank *= 0.9;
+			installments.push_back(installment);
 		}
 		// is an installment with save
 		else if (std::regex_search(content, matches, reSave)) {
 
 		}
+	}
+};
+
+void PriceFinder::check_installments() {
+	for (Price* installment: installments) {
+		std::cout << installment->nodeName();
 	}
 };

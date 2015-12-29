@@ -4,11 +4,20 @@ Price::Price(float value, std::string match, TextNode* textNode) {
 	this->value = value;
 	this->match = match;
 	this->textNode = textNode;
-	nodeName = &textNode->parentNode->nodeName;
+};
+
+Price::Price(Price& price) {
+	value = price.value;
+	match = price.match;
+	textNode = price.textNode;
+};
+
+const std::string& Price::nodeName() {
+	return textNode->parentNode->nodeName;
 };
 
 std::string Price::content() {
-	return textNode->content(match.length() * 1.5);
+	return textNode->parentNode->content(match.length() * 1.5);
 };
 
 int Price::distance(Price* other) {
