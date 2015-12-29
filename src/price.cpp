@@ -10,6 +10,7 @@ Price::Price(Price& price) {
 	value = price.value;
 	match = price.match;
 	textNode = price.textNode;
+	reference = &price;
 };
 
 const std::string& Price::nodeName() {

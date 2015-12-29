@@ -10,6 +10,7 @@ struct Price {
 	int installments = 0;
 	int siblings = 0;
 	int repetitions = 0;
+	Price* reference = nullptr;
 	Price(float, std::string, TextNode*);
 	Price(Price&);
 	const std::string& nodeName();
