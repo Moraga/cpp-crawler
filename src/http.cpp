@@ -44,7 +44,7 @@ std::string http::read() {
 };
 
 std::string http::fetch(std::string url) {
-	Url u = Url::parse(url);
+	Url u(url);
 	conn(u.domain, 80);
 	write("GET "+ u.path +" HTTP/1.0\r\nHost: "+ u.domain +"\r\n\r\n");
 	return read();
